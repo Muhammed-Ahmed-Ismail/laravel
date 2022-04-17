@@ -13,11 +13,11 @@
 
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Post Creator</label>
-            <select class="form-control">
+            <input type="text" class="form-control">
                 <option value="1">Ahmed</option>
                 <option value="2">Mohamed</option>
 
-            </select>
+            </input>
         </div>
 
         <button class="btn btn-primary">Update</button>
