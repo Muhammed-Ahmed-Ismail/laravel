@@ -15,13 +15,14 @@
         </tr>
         </thead>
         <tbody>
-      @foreach($myposts as $post)
+      @foreach($posts as $post)
             <tr>
                 <td>
                 {{ $post['id'] }}</th>
                 <td>{{ $post['title'] }}</td>
-                <td>{{ $post['post_creator'] }}</td>
+                <td>{{ $post->user->name }}</td>
                 <td>{{ $post['created_at'] }}</td>
+                {{--@if($post['id']===3) @dd($post) @endif--}}
                 <td>
                     <a href="{{ route('posts.show', ['post' => $post['id']]) }}" class="btn btn-info">View</a>
                     <a href="{{ route('posts.edit', ['post'=>$post['id']]) }}" class="btn btn-primary">Edit</a>
@@ -32,6 +33,9 @@
 
         </tbody>
     </table>
+    <div>
+        {{$posts->links()}}
+    </div>
 
 @endsection
 

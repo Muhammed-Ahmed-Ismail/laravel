@@ -4,19 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Post;
 
 class PostController extends Controller
 {
 
     public function index()
     {
-        $posts = [
+        /*$posts = [
             ['id' => 1, 'title' => 'Laravel', 'post_creator' => 'Ahmed', 'created_at' => '2022-04-16 10:37:00'],
             ['id' => 2, 'title' => 'PHP', 'post_creator' => 'Mohamed', 'created_at' => '2022-04-16 10:37:00'],
             ['id' => 3, 'title' => 'Javascript', 'post_creator' => 'Ali', 'created_at' => '2022-04-16 10:37:00'],
-        ];
+        ];*/
+        $posts=Post::paginate(10);
+        //dd($posts);
         return view('posts.index',[
-            'myposts'=>$posts
+            'posts'=>$posts
         ]);
     }
     public function create()
@@ -28,32 +31,39 @@ class PostController extends Controller
     }
     public function show($id)
     {
-        $id=($id>3)?3:$id;
-        $id=($id<1)?1:$id;
-        $posts = [
-            ['id' => 1, 'title' => 'Laravel', 'post_creator' => 'Ahmed', 'created_at' => '2022-04-16 10:37:00','email'=>'muhammed@gmail.com'],
-            ['id' => 2, 'title' => 'PHP', 'post_creator' => 'Mohamed', 'created_at' => '2022-04-16 10:37:00','email'=>'muhammed@gmail.com'],
-            ['id' => 3, 'title' => 'Javascript', 'post_creator' => 'Ali', 'created_at' => '2022-04-16 10:37:00','email'=>'muhammed@gmail.com'],
-        ];
+        $post=Post::find($id);
         return view('posts.show',[
-            'post'=>$posts[$id-1]
+            'post'=>$post
         ]);
     }
     public function edit($id)
     {
-        $id=($id>3)?3:$id;
-        $id=($id<1)?1:$id;
-        $posts = [
-            ['id' => 1, 'title' => 'Laravel', 'post_creator' => 'Ahmed', 'created_at' => '2022-04-16 10:37:00','email'=>'muhammed@gmail.com'],
-            ['id' => 2, 'title' => 'PHP', 'post_creator' => 'Mohamed', 'created_at' => '2022-04-16 10:37:00','email'=>'muhammed@gmail.com'],
-            ['id' => 3, 'title' => 'Javascript', 'post_creator' => 'Ali', 'created_at' => '2022-04-16 10:37:00','email'=>'muhammed@gmail.com'],
-        ];
+       $post=Post::find($id);
+       $users=User::all();
         return view('posts.edit',[
-            'post'=>$posts[$id-1]
+            'post'=>$post,
+            'users'=>$users
         ]);
     }
     public function store()
     {
-       return "Post Sotred Successfuly";
+        $input=request()->all();
+        //dd($input);
+        Post::create([
+            'title'=>$input['title'],
+            'writer_id'=>$input['writer_id'],
+            'description'=>$input['description']
+        ]);
+        return to_route('posts.index');
+    }
+    public function update()
+    {
+        $input=request()->all();
+        $post=Post::find($input['post_id']);
+        $post->title=$input['title'];
+        $post->description=$input['description'];
+        $post->writer_id=$input['writer_id'];
+        $post->save();
+        return to_route('posts.index');
     }
 }
