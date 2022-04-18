@@ -16,7 +16,7 @@ class PostController extends Controller
             ['id' => 2, 'title' => 'PHP', 'post_creator' => 'Mohamed', 'created_at' => '2022-04-16 10:37:00'],
             ['id' => 3, 'title' => 'Javascript', 'post_creator' => 'Ali', 'created_at' => '2022-04-16 10:37:00'],
         ];*/
-        $posts=Post::paginate(10);
+        $posts=Post::withTrashed()->paginate(10);
         //dd($posts);
         return view('posts.index',[
             'posts'=>$posts
@@ -63,6 +63,28 @@ class PostController extends Controller
         $post->title=$input['title'];
         $post->description=$input['description'];
         $post->writer_id=$input['writer_id'];
+        $post->save();
+        return to_route('posts.index');
+    }
+    public function confirmDelete($id)
+    {
+        return view('posts.confirmDelete',[
+           'id'=>$id
+        ]);
+    }
+    public function delete($id)
+    {
+        $post=Post::find($id);
+        $post->delete();
+        return to_route('posts.index');
+    }
+    public function retrieve($id)
+    {
+
+        $post=Post::withTrashed()
+            ->where('id', $id)->first();
+        //dd($post);
+        $post->restore();
         $post->save();
         return to_route('posts.index');
     }

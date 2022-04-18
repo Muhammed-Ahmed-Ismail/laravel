@@ -4,7 +4,7 @@
         @csrf
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label" name="id" >PostNumber</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="" name="post_id" value="{{$post['id']}}" readonly>
+            <input type="heddin" class="form-control" id="exampleFormControlInput1" placeholder="" name="post_id" value="{{$post['id']}}" readonly>
         </div>
 
         <div class="mb-3">

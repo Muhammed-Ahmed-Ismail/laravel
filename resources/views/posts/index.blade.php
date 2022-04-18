@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title') Index @endsection
 @section('content')
+
     <div class="text-center">
         <a href="{{ route('posts.create') }}" class="mt-4 btn btn-success">Create Post</a>
     </div>
@@ -16,19 +17,37 @@
         </thead>
         <tbody>
       @foreach($posts as $post)
+          @if(!$post->trashed())
             <tr>
                 <td>
                 {{ $post['id'] }}</th>
                 <td>{{ $post['title'] }}</td>
                 <td>{{ $post->user->name }}</td>
-                <td>{{ $post['created_at'] }}</td>
+                <td>{{ $post['created_at']->format('Y-m-d') }}</td>
                 {{--@if($post['id']===3) @dd($post) @endif--}}
                 <td>
                     <a href="{{ route('posts.show', ['post' => $post['id']]) }}" class="btn btn-info">View</a>
                     <a href="{{ route('posts.edit', ['post'=>$post['id']]) }}" class="btn btn-primary">Edit</a>
-                    <a href="#" class="btn btn-danger">Delete</a>
+                    {{--<a href="#deleteModal" class="btn btn-danger">Delete</a>--}}
+                    <a type="button" class="btn btn-danger"  href="{{route('posts.confirmDelete',['id'=>$post['id']])}}">
+                        Delete
+                    </a>
                 </td>
             </tr>
+          @else
+              <tr>
+
+                  <td colspan="4" style="text-align: center">--</td>
+                  <td>
+                      <form action="{{ route('posts.retrieve',['id'=>$post['id']]) }}" method="post">
+                          @csrf
+                          @method('put')
+                      <input type="submit" class="btn btn-warning" value="rollback">
+                      </form>
+                  </td>
+              </tr>
+          @endif
+
         @endforeach
 
         </tbody>
@@ -36,6 +55,10 @@
     <div>
         {{$posts->links()}}
     </div>
+{{--confirm modal --}}
+    <!-- Button trigger modal -->
+
+
 
 @endsection
 

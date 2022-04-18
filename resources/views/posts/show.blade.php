@@ -19,7 +19,7 @@
             <h5 class="card-title " style="display: inline">Name:  </h5>
             <p class="card-text"  style="display: inline">{{$post->user->name}}</p><br>
             <h5 class="card-title " style="display: inline">date: </h5>
-            <p class="card-text"  style="display: inline">{{$post['created_at']}}</p> <br>
+            <p class="card-text"  style="display: inline">{{$post['created_at']->format('Y-m-d- h:i:s a')}}</p> <br>
             <h5 class="card-title " style="display: inline">Email: </h5>
             <p class="card-text"  style="display: inline">{{$post->user->email}}</p><br>
             </div>
