@@ -28,3 +28,4 @@ Route::get('/posts/{post}/edit',[PostController::class, 'edit'])->name('posts.ed
 Route::post('/posts/update',[PostController::class,'update'])->name('posts.update');
 Route::delete('/posts/delete/{id}',[PostController::class,'delete'])->name('posts.delete');
 Route::put('/posts/retrieve/{id}',[PostController::class,'retrieve'])->name('posts.retrieve');
+Route::post('/posts/comment/add',[PostController::class,'addComment'])->name('posts.addComment');

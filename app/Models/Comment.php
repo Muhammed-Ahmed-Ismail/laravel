@@ -16,4 +16,9 @@ class Comment extends Model
     {
        return $this->belongsTo(User::class,'user_id');
     }
+    protected $fillable=[
+        'commentable_id',
+        'comment',
+        'user_id',
+    ];
 }

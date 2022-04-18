@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
@@ -27,8 +28,10 @@ class PostController extends Controller
     public function show($id)
     {
         $post=Post::find($id);
+        $users=User::all();
         return view('posts.show',[
-            'post'=>$post
+            'post'=>$post,
+            'users'=>$users
         ]);
     }
     public function edit($id)
@@ -82,4 +85,20 @@ class PostController extends Controller
         $post->save();
         return to_route('posts.index');
     }
+
+    public function addComment()
+    {
+        $input=request()->all();
+       // dd($input);
+        $postid=$input['postid'];
+        Comment::create([
+            'commentable_id'=>$input['postid'],
+            'user_id'=>$input['user_id'],
+            'comment'=>$input['comment'],
+            ]);
+       $post= Post::find($input['postid']);
+       // return redirect("/posts/$postid");
+        return to_route('posts.show',$post);
+    }
+
 }

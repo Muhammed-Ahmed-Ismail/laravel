@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('post_id');
             $table->foreign('post_id')->references('id')->on('posts');*/
             $table->integer('commentable_id')->nullable('false');
-            $table->string('commentable_type');
+            $table->string('commentable_type')->default("App\\\Models\\\Post");
             $table->timestamps();
         });
     }
