@@ -18,6 +18,7 @@
         <tbody>
       @foreach($posts as $post)
           @if(!$post->trashed())
+
             <tr>
                 <td>
                 {{ $post['id'] }}</th>

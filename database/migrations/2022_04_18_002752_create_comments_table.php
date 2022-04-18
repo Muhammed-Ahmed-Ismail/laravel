@@ -18,8 +18,12 @@ return new class extends Migration
             $table->text('comment')->nullable(false);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            /*$table->unsignedBigInteger('user_id');
+
             $table->unsignedBigInteger('post_id');
-            $table->foreign('post_id')->references('id')->on('posts');
+            $table->foreign('post_id')->references('id')->on('posts');*/
+            $table->integer('commentable_id')->nullable('false');
+            $table->string('commentable_type');
             $table->timestamps();
         });
     }

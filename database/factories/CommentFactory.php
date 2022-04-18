@@ -18,7 +18,8 @@ class CommentFactory extends Factory
     {
         return [
             'comment'=>$this->faker->text(100),
-            'post_id'=>rand(1,100),
+            'commentable_id'=>rand(1,100),
+            'commentable_type'=>'App\Models\Post',
             'user_id'=>rand(1,100)
         ];
     }

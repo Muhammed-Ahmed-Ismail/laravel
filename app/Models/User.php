@@ -43,11 +43,17 @@ class User extends Authenticatable
     ];
     public function posts()
     {
-        $this->hasMany(Post::class,'writer_id');
+        return $this->hasMany(Post::class,'writer_id');
     }
 
-    public function comments()
+   /* public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable');
-    }
+    }*/
+
+    /*public function addComment()
+    {
+        return $this->morphTo("", 'type', 'id');
+    }*/
+
 }
