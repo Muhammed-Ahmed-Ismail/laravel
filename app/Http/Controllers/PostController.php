@@ -11,13 +11,8 @@ class PostController extends Controller
 
     public function index()
     {
-        /*$posts = [
-            ['id' => 1, 'title' => 'Laravel', 'post_creator' => 'Ahmed', 'created_at' => '2022-04-16 10:37:00'],
-            ['id' => 2, 'title' => 'PHP', 'post_creator' => 'Mohamed', 'created_at' => '2022-04-16 10:37:00'],
-            ['id' => 3, 'title' => 'Javascript', 'post_creator' => 'Ali', 'created_at' => '2022-04-16 10:37:00'],
-        ];*/
+
         $posts=Post::withTrashed()->paginate(10);
-        //dd($posts);
         return view('posts.index',[
             'posts'=>$posts
         ]);
@@ -48,7 +43,7 @@ class PostController extends Controller
     public function store()
     {
         $input=request()->all();
-        //dd($input);
+
         Post::create([
             'title'=>$input['title'],
             'writer_id'=>$input['writer_id'],
@@ -83,7 +78,6 @@ class PostController extends Controller
 
         $post=Post::withTrashed()
             ->where('id', $id)->first();
-        //dd($post);
         $post->restore();
         $post->save();
         return to_route('posts.index');
