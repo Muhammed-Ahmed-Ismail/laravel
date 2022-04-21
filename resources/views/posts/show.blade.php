@@ -27,7 +27,7 @@
 
     </div>
 
-    <form method="post" action="{{ route('posts.addComment')}}">
+    <form method="post" action="{{ route('comments.create')}}">
         @csrf
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">add comment</label>
@@ -45,20 +45,48 @@
         <input type="hidden" value="{{$post['id']}}" name="postid">
         <input type="submit" class="btn btn-success">
     </form>
-    @foreach($post->comments as $commnet)
+    @foreach($comments as $comment)
+        @if(!$comment->trashed())
         <div class="card mt-5">
-            <div class="card-header">
-                commented_by: {{$commnet->user['name']}}
+            <div class="card-header" style="background-color:#a2d2ff ">
+                <p> commented by: {{$comment->user['name']}}</p>
+                <p> Time: {{$comment['created_at']}} </p>
             </div>
             <div class="card-body">
                 <h5 class="card-title">comment</h5>
-                <p class="card-text">{{$commnet['comment']}}</p>
+                <p class="card-text">{{$comment['comment']}}</p>
             </div>
-            <div class="align-self-end">
-                <button class="btn btn-primary"><i class="bi bi-pencil-square"></i>
-                </button>
-                <button class="btn btn-danger"><i class="bi bi-trash"></i></button>
+            <div class="align-self-end d-flex p-2">
+                <form action="{{route('comments.delete')}}" method="post" class="m-4">
+                    @csrf
+                    @method('delete')
+                    <input type="hidden" name="commentid" value="{{$comment['id']}}">
+                    <input type="hidden" name="postid" value="{{$post['id']}}">
+                    <button type="submit" class="btn btn-danger btn-lg"><i class="bi bi-trash"></i></button>
+                </form>
+                <form class="m-4">
+                    <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-pencil-square"></i></button>
+                </form>
             </div>
         </div>
+        @else
+            <div class="card mt-5">
+                <div class="card-header" style="background-color: #e63946">
+                    deleted comment
+                </div>
+                <div class="card-body">
+
+                </div>
+                <div class="align-self-end d-flex p-2">
+                    <form action="{{route('comments.retrieve')}}" method="post" class="m-4">
+                        @csrf
+                        @method('put')
+                        <input type="hidden" name="commentid" value="{{$comment['id']}}">
+                        <input type="hidden" name="postid" value="{{$post['id']}}">
+                        <button type="submit" class="btn btn-warning btn-lg"><i class="bi bi-arrow-counterclockwise"></i></button>
+                    </form>
+                </div>
+            </div>
+        @endif
     @endforeach
 @endsection

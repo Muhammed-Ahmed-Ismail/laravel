@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Comment;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -29,10 +36,13 @@ class PostController extends Controller
     {
         $post=Post::find($id);
         $users=User::all();
+        $comments=Comment::withTrashed()->where('commentable_id',$id)->get();
         return view('posts.show',[
             'post'=>$post,
-            'users'=>$users
+            'users'=>$users,
+            'comments'=>$comments
         ]);
+
     }
     public function edit($id)
     {
@@ -43,9 +53,9 @@ class PostController extends Controller
             'users'=>$users
         ]);
     }
-    public function store()
+    public function store(CreatePostRequest $request)
     {
-        $input=request()->all();
+        $input=$request->validated();;
 
         Post::create([
             'title'=>$input['title'],
@@ -54,10 +64,10 @@ class PostController extends Controller
         ]);
         return to_route('posts.index');
     }
-    public function update()
+    public function update(UpdatePostRequest $request,int $id)
     {
-        $input=request()->all();
-        $post=Post::find($input['post_id']);
+        $input=$request->validated();
+        $post=Post::find($id);
         $post->title=$input['title'];
         $post->description=$input['description'];
         $post->writer_id=$input['writer_id'];
@@ -86,19 +96,21 @@ class PostController extends Controller
         return to_route('posts.index');
     }
 
-    public function addComment()
+    public function viewAjax(Request $request): JsonResponse
     {
-        $input=request()->all();
-       // dd($input);
-        $postid=$input['postid'];
-        Comment::create([
-            'commentable_id'=>$input['postid'],
-            'user_id'=>$input['user_id'],
-            'comment'=>$input['comment'],
-            ]);
-       $post= Post::find($input['postid']);
-       // return redirect("/posts/$postid");
-        return to_route('posts.show',$post);
+       $postId=$request->input('id');
+       $post=Post::find($postId);
+       $responseComments=array();
+       foreach ($post->comments as $comment)
+       {
+            $responseComments[$comment->user->name]=$comment->comment;
+       }
+        return response()->json([
+            'title'=>$post->title,
+            'post'=>$post->description,
+            'comments'=>$responseComments
+        ]);
     }
+
 
 }
