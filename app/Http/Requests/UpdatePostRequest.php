@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class UpdatePostRequest extends FormRequest
@@ -24,7 +25,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function rules()
     {
-      //  dd($this->id);
+//       dd(Auth::user());
         return [
             'title'=>['required',
                 Rule::unique('posts')->ignore($this->id),

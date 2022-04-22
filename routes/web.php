@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
@@ -16,9 +17,7 @@ use \App\Http\Controllers\AjaxController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[PostController::class,'index'] );
 Route::post('/ajaxView',[PostController::class,'viewAjax'])->name('ajax.post');
 Route::delete('/posts/delete',[PostController::class,'delete'])->name('posts.delete');
 Route::get('/posts',[PostController::class,'index'])->name('posts.index');
@@ -36,3 +35,7 @@ Route::put('/posts/comments/retrieve',[CommentController::class,'retrieve'])->na
 Route::post('/ajax', [AjaxController::class,'send_http_request'])->name('ajaxRequest.post');
 Route::get('/ajax', [AjaxController::class,'view']);
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
