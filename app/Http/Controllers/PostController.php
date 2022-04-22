@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Jobs\PruneOldPostsJob;
 use App\Models\Comment;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -13,6 +14,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -60,7 +63,8 @@ class PostController extends Controller
         Post::create([
             'title'=>$input['title'],
             'writer_id'=>$input['writer_id'],
-            'description'=>$input['description']
+            'description'=>$input['description'],
+            'slug'=>Str::slug($input['title'])
         ]);
         return to_route('posts.index');
     }
@@ -71,6 +75,7 @@ class PostController extends Controller
         $post->title=$input['title'];
         $post->description=$input['description'];
         $post->writer_id=$input['writer_id'];
+        $post->slug=Str::slug($input['title']);
         $post->save();
         return to_route('posts.index');
     }
@@ -110,6 +115,13 @@ class PostController extends Controller
             'post'=>$post->description,
             'comments'=>$responseComments
         ]);
+    }
+    public function pruneOldPosts()
+    {
+        $proneJob=new PruneOldPostsJob();
+        //dd($proneJob);
+        dispatch($proneJob);
+        return to_route('posts.index');
     }
 
 

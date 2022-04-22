@@ -14,7 +14,8 @@ class Post extends Model
     protected $fillable=[
         'title',
         'writer_id',
-        'description'
+        'description',
+        'slug'
     ];
     protected $casts=[
         'created_at'=>'datetime:Y-m-d'

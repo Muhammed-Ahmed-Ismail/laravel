@@ -4,16 +4,18 @@
 @endsection
 @section('content')
 
-    <div class="text-center">
+    <div class="text-center container">
         <a href="{{ route('posts.create') }}" class="mt-4 btn btn-success">Create Post</a>
     </div>
-    <table class="table mt-4">
+    <table class="table mt-4 container">
         <thead>
         <tr>
             <th scope="col">#</th>
             <th scope="col">Title</th>
+            <th scope="col">Slug</th>
             <th scope="col">Posted By</th>
             <th scope="col">Created At</th>
+
             <th scope="col">Actions</th>
         </tr>
         </thead>
@@ -24,7 +26,9 @@
                 <tr>
                     <td>{{ $post['id'] }}</td>
                     <td>{{ $post['title'] }}</td>
+                    <td> {{$post->slug}}</td>
                     <td>{{ $post->user->name }}</td>
+
                     <td>{{ $post['created_at']->format('Y-m-d') }}</td>
 
                     <td>
@@ -58,8 +62,12 @@
     <div>
         {{$posts->links()}}
     </div>
-    <!-- Button trigger modal -->
-    <!-- Modal -->
+{{--   ============================================= prune old ========================================================--}}
+    <form action="{{ route('posts.prune') }}" method="post">
+        @csrf
+        <button type="submit" class="btn btn-danger">prune old</button>
+    </form>
+{{--    ============================================ modal ==============================================================--}}
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
