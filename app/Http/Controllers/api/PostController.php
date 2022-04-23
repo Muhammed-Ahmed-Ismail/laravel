@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostResource;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
@@ -16,14 +17,14 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts=Post::withTrashed()->paginate(10);
-        return $posts;
+        $posts=Post::with('user')->with('comments')->withTrashed()->paginate(10);
+        return PostResource::collection($posts);
     }
 
     public function show($id)
     {
         $post=Post::findOrFail($id);
-        return $post;
+        return new PostResource($post);
 
     }
 

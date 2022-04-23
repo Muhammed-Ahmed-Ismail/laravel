@@ -18,7 +18,7 @@ use \App\Http\Controllers\AjaxController;
 */
 Route::group(['middleware'=>'auth'],function(){
 
-    Route::get('/',[PostController::class,'index'] );
+   // Route::get('/',[PostController::class,'index'] );
     Route::post('/ajaxView',[PostController::class,'viewAjax'])->name('ajax.post');
     Route::delete('/posts/delete',[PostController::class,'delete'])->name('posts.delete');
     Route::post('/posts/pruneold',[PostController::class,'pruneOldPosts'])->name('posts.prune');
