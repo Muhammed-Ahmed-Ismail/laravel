@@ -40,10 +40,13 @@ class PostController extends Controller
         $post=Post::find($id);
         $users=User::all();
         $comments=Comment::withTrashed()->where('commentable_id',$id)->get();
+        $photoStream=Storage::get($post->photo_path);
+
         return view('posts.show',[
             'post'=>$post,
             'users'=>$users,
-            'comments'=>$comments
+            'comments'=>$comments,
+            'photo'=>$photoStream
         ]);
 
     }
@@ -58,20 +61,23 @@ class PostController extends Controller
     }
     public function store(CreatePostRequest $request)
     {
-        $input=$request->validated();;
-
+        $input=$request->validated();
+        //dd($request->photo);
+        $photoPath=$request->file('photo')->store('photos');
+       // dd($photoPath);
         Post::create([
             'title'=>$input['title'],
             'writer_id'=>$input['writer_id'],
             'description'=>$input['description'],
-            'slug'=>Str::slug($input['title'])
+            'slug'=>Str::slug($input['title']),
+            'photo_path'=>$photoPath
         ]);
         return to_route('posts.index');
     }
-    public function update(UpdatePostRequest $request,int $id)
+    public function update(UpdatePostRequest $request)
     {
         $input=$request->validated();
-        $post=Post::find($id);
+        $post=Post::find($request->route()->id);
         $post->title=$input['title'];
         $post->description=$input['description'];
         $post->writer_id=$input['writer_id'];
@@ -119,7 +125,6 @@ class PostController extends Controller
     public function pruneOldPosts()
     {
         $proneJob=new PruneOldPostsJob();
-        //dd($proneJob);
         dispatch($proneJob);
         return to_route('posts.index');
     }

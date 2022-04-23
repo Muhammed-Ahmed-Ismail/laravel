@@ -11,6 +11,16 @@
         </div>
     </div>
 
+
+    <div class="card mt-5">
+        <div class="card-header">
+            photo
+        </div>
+        <div class="card-body">
+            <img src="{{$photo}}" alt="photo">
+        </div>
+    </div>
+
     <div class="card mt-5">
         <div class="card-header">
             {{$post['title']}}

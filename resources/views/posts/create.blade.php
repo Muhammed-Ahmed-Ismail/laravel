@@ -3,7 +3,7 @@
 
 @section('content')
 
-    <form method="post" action="{{ route('posts.store')}}">
+    <form method="post" action="{{ route('posts.store')}}" enctype="multipart/form-data">
 
         @csrf
         <div class="mb-3">
@@ -17,6 +17,14 @@
             <label for="exampleFormControlTextarea1" class="form-label " >Description</label>
             <textarea class="form-control @error('description') is-invalid @enderror" id="exampleFormControlTextarea1" rows="3" name="description" ></textarea>
             @error('description')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label " >Post Photo</label>
+
+            <input type="file" class="form-control-file @error('photo') is-invalid @enderror " id="exampleFormControlFile1" name="photo"/>
+            @error('photo')
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
         </div>
