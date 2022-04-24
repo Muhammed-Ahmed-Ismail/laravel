@@ -63,13 +63,13 @@ class PostController extends Controller
     {
         $input=$request->validated();
         //dd($request->photo);
-        $photoPath=$request->file('photo')->store('photos');
+        $photoPath=$request->file('photo')->store('public/photos');
        // dd($photoPath);
         Post::create([
             'title'=>$input['title'],
             'writer_id'=>$input['writer_id'],
             'description'=>$input['description'],
-            'slug'=>Str::slug($input['title']),
+           // 'slug'=>Str::slug($input['title']),
             'photo_path'=>$photoPath
         ]);
         return to_route('posts.index');

@@ -17,7 +17,7 @@
             photo
         </div>
         <div class="card-body">
-            <img src="{{$photo}}" alt="photo">
+            <img src="{{Storage::url($post->photo_path)}}" alt="photo" style="max-width:100% ">
         </div>
     </div>
 
