@@ -27,3 +27,5 @@
 
 - ## preview
      ![](Documentaion/Preview.gif)
+  - ### ajax call
+    ![](Documentaion/ajaxCall.gif)  
