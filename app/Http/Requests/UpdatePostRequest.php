@@ -31,7 +31,8 @@ class UpdatePostRequest extends FormRequest
                 Rule::unique('posts')->ignore($this->id),
                 'max:20'],
             'description'=>['required'],
-            'writer_id'=>['required','exists:users,id']
+            'writer_id'=>['required','exists:users,id'],
+            'photo'=>['mimetypes:image/jpg,image/png,image/jpeg']
         ];
     }
 

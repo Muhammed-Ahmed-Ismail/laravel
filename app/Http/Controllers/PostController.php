@@ -6,6 +6,7 @@ use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Jobs\PruneOldPostsJob;
 use App\Models\Comment;
+use Illuminate\Support\Facades\File;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -40,13 +41,12 @@ class PostController extends Controller
         $post=Post::find($id);
         $users=User::all();
         $comments=Comment::withTrashed()->where('commentable_id',$id)->get();
-        $photoStream=Storage::get($post->photo_path);
+
 
         return view('posts.show',[
             'post'=>$post,
             'users'=>$users,
             'comments'=>$comments,
-            'photo'=>$photoStream
         ]);
 
     }
@@ -62,14 +62,13 @@ class PostController extends Controller
     public function store(CreatePostRequest $request)
     {
         $input=$request->validated();
-        //dd($request->photo);
+
         $photoPath=$request->file('photo')->store('public/photos');
-       // dd($photoPath);
+
         Post::create([
             'title'=>$input['title'],
             'writer_id'=>$input['writer_id'],
             'description'=>$input['description'],
-           // 'slug'=>Str::slug($input['title']),
             'photo_path'=>$photoPath
         ]);
         return to_route('posts.index');
@@ -78,12 +77,18 @@ class PostController extends Controller
     {
         $input=$request->validated();
         $post=Post::find($request->route()->id);
+        if($request->hasFile('photo')){
+           File::delete(public_path( Storage::url($post->photo_path)));
+
+        }
+
         $post->title=$input['title'];
         $post->description=$input['description'];
         $post->writer_id=$input['writer_id'];
         $post->slug=Str::slug($input['title']);
+        $post->photo_path=$request->file('photo')->store('public/photos');
         $post->save();
-        return to_route('posts.index');
+         return redirect()->back();
     }
     public function confirmDelete($id)
     {

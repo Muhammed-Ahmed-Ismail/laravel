@@ -46,14 +46,4 @@ class User extends Authenticatable
         return $this->hasMany(Post::class,'writer_id');
     }
 
-   /* public function comments()
-    {
-        return $this->morphMany(Comment::class, 'commentable');
-    }*/
-
-    /*public function addComment()
-    {
-        return $this->morphTo("", 'type', 'id');
-    }*/
-
 }

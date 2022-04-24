@@ -23,7 +23,6 @@ class CommentController extends Controller
     public function delete()
     {
         $input=request()->all();
-        //dd($input);
         $id=$input['commentid'];
         $postid=$input['postid'];
         $comment=Comment::find($id);
