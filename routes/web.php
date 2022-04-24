@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\ThirdPartyAuth\GitHubAuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use \App\Http\Controllers\AjaxController;
+use Laravel\Socialite\Facades\Socialite;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +21,7 @@ use \App\Http\Controllers\AjaxController;
 */
 Route::group(['middleware'=>'auth'],function(){
 
-   // Route::get('/',[PostController::class,'index'] );
+    Route::get('/',[PostController::class,'index'] );
     Route::post('/ajaxView',[PostController::class,'viewAjax'])->name('ajax.post');
     Route::delete('/posts/delete',[PostController::class,'delete'])->name('posts.delete');
     Route::post('/posts/pruneold',[PostController::class,'pruneOldPosts'])->name('posts.prune');
@@ -45,3 +48,9 @@ Route::get('/ajax', [AjaxController::class,'view']);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/auth/redirect', function () {
+    return Socialite::driver('github')->redirect();
+})->name('github.auth');
+
+Route::get('/auth/github/callback',[GitHubAuthController::class,'authenticate'] );
