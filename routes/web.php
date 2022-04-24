@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ThirdPartyAuth\FaceBookAuthController;
 use App\Http\Controllers\ThirdPartyAuth\GitHubAuthController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -49,8 +50,10 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/auth/redirect', function () {
-    return Socialite::driver('github')->redirect();
-})->name('github.auth');
+Route::get('/auth/github/redirect', [GitHubAuthController::class,'redirect'])->name('github.redirect');
 
-Route::get('/auth/github/callback',[GitHubAuthController::class,'authenticate'] );
+Route::get('/auth/github/callback',[GitHubAuthController::class,'authenticate']);
+
+Route::get('/auth/facebook/redirect', [FaceBookAuthController::class,'redirect'])->name('facebook.redirect');
+
+Route::get('/auth/facebook/callback',[FaceBookAuthController::class,'authenticate']);

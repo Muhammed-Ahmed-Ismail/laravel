@@ -27,4 +27,7 @@ class GitHubAuthController extends Controller
 
         return to_route('posts.index');
     }
+    public function redirect () {
+        return Socialite::driver('github')->redirect();
+    }
 }
